@@ -1,5 +1,4 @@
 namespace WebApi.Helpers;
-
 using Microsoft.EntityFrameworkCore;
 using WebApi.Entities;
 
@@ -17,6 +16,8 @@ public class DataContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
         // connect to sqlite database
-        options.UseSqlite(Configuration.GetConnectionString("WebApiDatabase"));
+        var connectionString = Configuration.GetConnectionString("WebApiDatabase");
+        options.UseMySql(connectionString, 
+        ServerVersion.AutoDetect(connectionString));
     }
 }

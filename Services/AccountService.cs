@@ -28,6 +28,7 @@ public interface IAccountService
     AccountResponse Create(CreateRequest model);
     AccountResponse Update(int id, UpdateRequest model);
     void Delete(int id);
+    string ShowMessage(string message);
 }
 
 public class AccountService : IAccountService
@@ -436,5 +437,8 @@ public class AccountService : IAccountService
             html: $@"<h4>Reset Password Email</h4>
                         {message}"
         );
+    }
+    public String ShowMessage(string message){
+        return message;
     }
 }

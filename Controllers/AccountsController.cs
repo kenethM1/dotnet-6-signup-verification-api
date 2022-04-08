@@ -112,6 +112,12 @@ public class AccountsController : BaseController
         var account = _accountService.GetById(id);
         return Ok(account);
     }
+    [AllowAnonymous]
+    [HttpGet("message")]
+    public IActionResult GetMessage(string message)
+    {
+        return Ok(_accountService.ShowMessage(message));
+    }
 
     [Authorize(Role.Admin)]
     [HttpPost]
