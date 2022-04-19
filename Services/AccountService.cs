@@ -68,7 +68,6 @@ public class AccountService : IAccountService
 
         // remove old refresh tokens from account
         removeOldRefreshTokens(account);
-
         // save changes to db
         _context.Update(account);
         _context.SaveChanges();
@@ -137,8 +136,8 @@ public class AccountService : IAccountService
         {
             // send already registered error in email to prevent account enumeration
             sendAlreadyRegisteredEmail(model.Email, origin);
-            return;
-        }
+            throw new AppException("Email" + model.Email + " is already registered");            
+        }       
 
         // map model to new account object
         var account = _mapper.Map<Account>(model);
@@ -148,6 +147,7 @@ public class AccountService : IAccountService
         account.Role = isFirstAccount ? Role.Admin : Role.User;
         account.Created = DateTime.UtcNow;
         account.VerificationToken = generateVerificationToken();
+        account.VerificationCode = generateVerificationCode();
 
         // hash password
         account.PasswordHash = BCrypt.HashPassword(model.Password);
@@ -160,9 +160,16 @@ public class AccountService : IAccountService
         sendVerificationEmail(account, origin);
     }
 
+    private string generateVerificationCode()
+    {
+        var random = new Random();
+        var code = random.Next(1000, 9999).ToString();
+        return code;
+    }
+
     public void VerifyEmail(string token)
     {
-        var account = _context.Accounts.SingleOrDefault(x => x.VerificationToken == token);
+        var account = _context.Accounts.SingleOrDefault(x => x.VerificationToken == token || x.VerificationCode == token);
 
         if (account == null) 
             throw new AppException("Verification failed");
@@ -374,25 +381,14 @@ public class AccountService : IAccountService
     private void sendVerificationEmail(Account account, string origin)
     {
         string message;
-        if (!string.IsNullOrEmpty(origin))
-        {
-            // origin exists if request sent from browser single page app (e.g. Angular or React)
-            // so send link to verify via single page app
-            var verifyUrl = $"{origin}/account/verify-email?token={account.VerificationToken}";
-            message = $@"<p>Please click the below link to verify your email address:</p>
-                            <p><a href=""{verifyUrl}"">{verifyUrl}</a></p>";
-        }
-        else
-        {
             // origin missing if request sent directly to api (e.g. from Postman)
             // so send instructions to verify directly with api
-            message = $@"<p>Please use the below token to verify your email address with the <code>/accounts/verify-email</code> api route:</p>
-                            <p><code>{account.VerificationToken}</code></p>";
-        }
+            message = $@"<p>Use this verification code to verify your email address:</p>
+                            <p><code>{account.VerificationCode}</code></p>";
 
         _emailService.Send(
             to: account.Email,
-            subject: "Sign-up Verification API - Verify Email",
+            subject: "Sign-up Verification - Verify Email",
             html: $@"<h4>Verify Email</h4>
                         <p>Thanks for registering!</p>
                         {message}"
