@@ -58,8 +58,8 @@ public class AccountsController : BaseController
     [HttpPost("register")]
     public IActionResult Register(RegisterRequest model)
     {
-        _accountService.Register(model, Request.Headers["origin"]);
-        return Ok(new { message = "Registration successful, please check your email for verification instructions" });
+       var response = _accountService.Register(model, Request.Headers["origin"]);
+        return Ok(response);
     }
 
     [AllowAnonymous]

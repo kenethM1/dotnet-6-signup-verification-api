@@ -61,4 +61,4 @@ using (var scope = app.Services.CreateScope())
     app.MapControllers();
 }
 
-app.Run("http://192.168.31.126:4000");
+app.Run("http://192.168.88.28:4000");

@@ -5,6 +5,9 @@ using WebApi.Entities;
 public class DataContext : DbContext
 {
     public DbSet<Account> Accounts { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<Image> Images { get; set; }
+    public DbSet<Product> Products { get; set; }
     
     private readonly IConfiguration Configuration;
 
