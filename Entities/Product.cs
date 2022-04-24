@@ -8,6 +8,27 @@ public class Product {
     public List<Image> Images { get; set; }
     public int CategoryId { get; set; }
     public Category Category { get; set; }
+    public int BrandId { get; set; }
+    public Brand Brand { get; set; }
+    public int AccountId { get; set; } 
+    public Account Account { get; set; }
     public DateTime Created { get; set; }
     public DateTime? Updated { get; set; }
+
+    internal ProductResponse FromEntity()
+    {
+        return new ProductResponse
+        {
+            Id = this.Id,
+            Title = this.Title,
+            Description = this.Description,
+            Price = this.Price,
+            CategoryId = this.CategoryId,
+            Category = this.Category.FromEntity(),
+            BrandId = this.BrandId,
+            Brand = this.Brand.FromEntity(),
+            Images = this.Images.Select(i => i.FromEntity()).ToList(),
+            Updated = this.Updated
+        };
+    }
 }

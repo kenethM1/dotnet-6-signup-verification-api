@@ -1,10 +1,7 @@
 using WebApi.Entities;
 public interface IProductsService {
-    IEnumerable<Product> GetAll();
-    Product GetById(int id);
-    Product Create(CreateRequest model);
-    Product Update(int id, UpdateRequest model);
-    void Delete(int id);
+    List<ProductResponse> GetAll();
+    ProductResponse CreateProduct(ProductsRequest request);
     
 }
 

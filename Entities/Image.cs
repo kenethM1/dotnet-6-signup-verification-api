@@ -9,4 +9,14 @@ public class Image {
     public Product Product { get; set; }
     public DateTime Created { get; set; }
     public DateTime? Updated { get; set; }
+
+    internal ImageDTO FromEntity()
+    {
+        return new ImageDTO
+        {
+            Id = this.Id,
+            Url = this.Url,
+            ProductId = this.ProductId
+        };
+    }
 }

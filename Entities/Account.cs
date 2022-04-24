@@ -10,6 +10,7 @@ public class Account
     public string PasswordHash { get; set; }
     public bool AcceptTerms { get; set; }
     public Role Role { get; set; }
+    public List<Product> Products { get; set; }
     public string VerificationToken { get; set; }
     public string VerificationCode { get; set; }
     public DateTime? Verified { get; set; }
@@ -17,6 +18,16 @@ public class Account
     public string ResetToken { get; set; }
     public DateTime? ResetTokenExpires { get; set; }
     public DateTime? PasswordReset { get; set; }
+
+    internal AccountDTO FromEntity()
+    {
+        return new AccountDTO{
+            Id = this.Id,
+            FirstName = this.FirstName,
+            LastName = this.LastName
+        };
+    }
+
     public DateTime Created { get; set; }
     public DateTime? Updated { get; set; }
     public List<RefreshToken> RefreshTokens { get; set; }

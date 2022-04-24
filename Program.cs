@@ -10,10 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 {
     var services = builder.Services;
     var env = builder.Environment;
- 
+
     services.AddDbContext<DataContext>();
     services.AddCors();
-    services.AddControllers().AddJsonOptions(x => 
+    services.AddControllers().AddJsonOptions(x =>
     {
         // serialize enums as strings in api responses (e.g. Role)
         x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
@@ -24,10 +24,13 @@ var builder = WebApplication.CreateBuilder(args);
     // configure strongly typed settings object
     services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
+
     // configure DI for application services
     services.AddScoped<IJwtUtils, JwtUtils>();
     services.AddScoped<IAccountService, AccountService>();
     services.AddScoped<IEmailService, EmailService>();
+    services.AddScoped<IProductsService, ProductsService>();
+    services.AddScoped<ICategoriesService, CategoriesService>();
 }
 
 var app = builder.Build();
@@ -35,7 +38,7 @@ var app = builder.Build();
 // migrate any database changes on startup (includes initial db creation)
 using (var scope = app.Services.CreateScope())
 {
-    var dataContext = scope.ServiceProvider.GetRequiredService<DataContext>();    
+    var dataContext = scope.ServiceProvider.GetRequiredService<DataContext>();
     dataContext.Database.Migrate();
 }
 
@@ -52,6 +55,13 @@ using (var scope = app.Services.CreateScope())
         .AllowAnyHeader()
         .AllowCredentials());
 
+    app.UseAuthentication();
+    app.UseRouting();
+    app.UseAuthorization();
+    app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapControllers();
+    });
     // global error handler
     app.UseMiddleware<ErrorHandlerMiddleware>();
 
@@ -61,4 +71,4 @@ using (var scope = app.Services.CreateScope())
     app.MapControllers();
 }
 
-app.Run("http://192.168.88.28:4000");
+app.Run("http://192.168.31.148:4000");

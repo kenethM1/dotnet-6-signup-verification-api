@@ -12,17 +12,24 @@ using WebApi.Services;
 
 public class ProductsController : BaseController
 {
-
-    public ProductsController()
+    private readonly IProductsService _productsService;
+    public ProductsController(IProductsService productsService)
     {
-        
+        _productsService = productsService;
     }
-
-[AllowAnonymous]
-[HttpGet("/categories")]
-    public IActionResult GetCategories()
+    
+    [AllowAnonymous]
+    [HttpGet("/GetAllProducts")]
+    public ActionResult<List<ProductResponse>> GetProducts()
     {
-        
-        return Ok(new { message = "Token revoked" });
+        var response = _productsService.GetAll();
+        return Ok(response);
+    }
+    [AllowAnonymous]
+    [HttpPost("/CreateProduct")]
+    public ActionResult<ProductResponse> CreateProduct(ProductsRequest request)
+    {
+        var response = _productsService.CreateProduct(request);
+        return Ok(response);
     }
 }
