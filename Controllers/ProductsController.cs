@@ -32,4 +32,11 @@ public class ProductsController : BaseController
         var response = _productsService.CreateProduct(request);
         return Ok(response);
     }
+    [AllowAnonymous]
+    [HttpPost("/removeProduct/{id}")]
+    public ActionResult<ProductResponse> RemoveProduct(int id)
+    {
+        var response = _productsService.RemoveProduct(id);
+        return Ok(response);
+    }
 }

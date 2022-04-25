@@ -2,6 +2,7 @@ using WebApi.Entities;
 public interface IProductsService {
     List<ProductResponse> GetAll();
     ProductResponse CreateProduct(ProductsRequest request);
+    ProductResponse RemoveProduct(int id);
     
 }
 

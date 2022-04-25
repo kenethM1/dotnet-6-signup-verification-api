@@ -12,7 +12,7 @@ public class ProductsService : IProductsService
 
     public List<ProductResponse> GetAll()
     {
-        var products = _context.Products.Include(x => x.Category).Include(x => x.Brand).Include(x => x.Account).ToList();
+        var products = _context.Products.Include(x => x.Category).Include(x => x.Brand).Include(x => x.Account).Include(e=>e.Images).ToList();
         var response = products.Select(x => new ProductResponse
         {
             Id = x.Id,
@@ -23,7 +23,8 @@ public class ProductsService : IProductsService
             Brand = x.Brand.FromEntity(),
             SellerAccount = x.Account.FromEntity(),
             SellerAccountId = x.Account.Id,
-            Updated = x.Updated
+            Updated = x.Updated,
+            Images = x.Images.Select(i => i.FromEntity()).ToList()
         }).ToList();
         return response;
     }
@@ -55,5 +56,17 @@ public ProductResponse CreateProduct(ProductsRequest request)
 
     return newProduct.FromEntity();
 }
+
+    public ProductResponse RemoveProduct(int id)
+    {
+        var product = _context.Products.Include(x => x.Category).Include(x => x.Brand).Include(x => x.Account).FirstOrDefault(x => x.Id == id);
+        if (product == null)
+        {
+            return null;
+        }
+        _context.Products.Remove(product);
+        _context.SaveChanges();
+        return product.FromEntity();
+    }
     
 }

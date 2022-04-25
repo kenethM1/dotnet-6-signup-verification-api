@@ -27,7 +27,7 @@ public class Product {
             Category = this.Category.FromEntity(),
             BrandId = this.BrandId,
             Brand = this.Brand.FromEntity(),
-            Images = this.Images.Select(i => i.FromEntity()).ToList(),
+            Images = Images != null ? this.Images.Select(i => i.FromEntity()).ToList() : new List<ImageDTO>(),
             Updated = this.Updated
         };
     }
