@@ -21,4 +21,11 @@ public class CategoryController : BaseController
         var response = _categoriesService.GetAll();
         return Ok(response);
     }
+    [AllowAnonymous]
+    [HttpPost("/CreateCategory")]
+    public IActionResult CreateCategory(CategoryRequest request)
+    {
+        var response = _categoriesService.Create(request);
+        return Ok(response);
+    }
 }

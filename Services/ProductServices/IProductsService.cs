@@ -3,6 +3,7 @@ public interface IProductsService {
     List<ProductResponse> GetAll();
     ProductResponse CreateProduct(ProductsRequest request);
     ProductResponse RemoveProduct(int id);
+    List<ProductResponse> GetProductByCategory(int id);
     
 }
 

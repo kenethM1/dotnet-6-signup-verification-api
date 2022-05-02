@@ -56,6 +56,24 @@ public ProductResponse CreateProduct(ProductsRequest request)
 
     return newProduct.FromEntity();
 }
+    public List<ProductResponse> GetProductByCategory(int id)
+    {
+        var products = _context.Products.Where(e=>e.CategoryId == id).Include(x => x.Category).Include(x => x.Brand).Include(x => x.Account).Include(e=>e.Images).Where(x => x.CategoryId == id).ToList();
+        var response = products.Select(x => new ProductResponse
+        {
+            Id = x.Id,
+            Title = x.Title,
+            Description = x.Description,
+            Price = x.Price,
+            Category = x.Category.FromEntity(),
+            Brand = x.Brand.FromEntity(),
+            SellerAccount = x.Account.FromEntity(),
+            SellerAccountId = x.Account.Id,
+            Updated = x.Updated,
+            Images = x.Images.Select(i => i.FromEntity()).ToList()
+        }).ToList();
+        return response;
+    }
 
     public ProductResponse RemoveProduct(int id)
     {

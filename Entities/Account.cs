@@ -7,6 +7,7 @@ public class Account
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; }
+    public string ProfilePicture { get; set; }
     public string PasswordHash { get; set; }
     public bool AcceptTerms { get; set; }
     public Role Role { get; set; }
@@ -23,6 +24,7 @@ public class Account
     {
         return new AccountDTO{
             Id = this.Id,
+            ProfilePicture = this.ProfilePicture,
             FirstName = this.FirstName,
             LastName = this.LastName
         };

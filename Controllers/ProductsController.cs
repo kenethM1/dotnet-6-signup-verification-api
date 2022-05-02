@@ -33,6 +33,13 @@ public class ProductsController : BaseController
         return Ok(response);
     }
     [AllowAnonymous]
+    [HttpGet("/GetProductByCategory/{id}")]
+    public ActionResult<List<ProductResponse>> GetProductByCategory(int id)
+    {
+        var response = _productsService.GetProductByCategory(id);
+        return Ok(response);
+    }
+    [AllowAnonymous]
     [HttpPost("/removeProduct/{id}")]
     public ActionResult<ProductResponse> RemoveProduct(int id)
     {
