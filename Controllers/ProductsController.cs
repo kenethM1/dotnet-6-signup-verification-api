@@ -46,4 +46,28 @@ public class ProductsController : BaseController
         var response = _productsService.RemoveProduct(id);
         return Ok(response);
     }
+    [AllowAnonymous]
+    [HttpGet("/getAllSizes")]
+    public ActionResult<List<SizeDTO>> GetSizeList()
+    {
+        var response = _productsService.GetAllSizes();
+        return Ok(response);
+    }
+
+    [AllowAnonymous]
+    [HttpGet("/getAllBrands")]
+    public ActionResult<BrandResponse> getAllBrands()
+    {
+        var response = _productsService.GetAllBrands();
+        return Ok(response);
+    }
+
+    [AllowAnonymous]
+    [HttpPost("/insertListSizes")]
+    public ActionResult<List<SizeDTO>> InsertListSize(SizeRequest request)
+    {
+        var response = _productsService.InsertListSizes(request);
+        return Ok(response);
+    }
+
 }

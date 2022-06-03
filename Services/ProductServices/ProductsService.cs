@@ -46,13 +46,14 @@ public ProductResponse CreateProduct(ProductsRequest request)
             Updated = DateTime.Now,
             Created = DateTime.Now
         }).ToList(),
+        SizeId = request.SizeId,
         Created = DateTime.Now,
         Updated = DateTime.Now
     };
     _context.Products.Add(product);
     _context.SaveChanges();
 
-    var newProduct = _context.Products.Include(x => x.Category).Include(x => x.Brand).Include(x => x.Account).FirstOrDefault(x => x.Id == product.Id);
+    var newProduct = _context.Products.Include(x => x.Category).Include(x => x.Brand).Include(x => x.Account).Include(x=>x.Size).FirstOrDefault(x => x.Id == product.Id);
 
     return newProduct.FromEntity();
 }
@@ -86,5 +87,44 @@ public ProductResponse CreateProduct(ProductsRequest request)
         _context.SaveChanges();
         return product.FromEntity();
     }
+    public List<SizeDTO> GetAllSizes(){
+        var sizes = _context.Size.Select(e=>e.toDto()).Distinct().ToList();
+        return sizes;
+    }
+    public List<SizeDTO> InsertListSizes(SizeRequest request)
+    {
+        if(request ==null)
+        {
+            return new List<SizeDTO>{
+                new SizeDTO{
+                    Message = "NullValues"
+                }
+            };       
+        }
+        var notAllowedSizes = new List<string>();
+        var addedSizes = new List<string>();
+        foreach(string size in request.Size)
+        {
+            var existSizeInDatabase = _context.Size.FirstOrDefault(e=>e.Name == size);
+            if(existSizeInDatabase !=null)
+            {
+                notAllowedSizes.Add(existSizeInDatabase.Name);
+            }
+            if(existSizeInDatabase == null)
+            {
+                _context.Size.Add(new Size{Name=size});
+                addedSizes.Add(size);               
+            }
+        }
+        _context.SaveChanges();
+        return _context.Size.Select(e=>e.toDto()).ToList();
+    }
     
+    public BrandResponse GetAllBrands()
+    {
+        var response = new BrandResponse();
+        var result = _context.Brand.Select(e=>e.FromEntity()).Distinct().ToList();
+        response.Brands = result.ToList();
+        return response;
+    }
 }

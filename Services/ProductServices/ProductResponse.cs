@@ -10,6 +10,7 @@ public class ProductResponse : ResponseBase
     public int BrandId { get; set; }
     public BrandDTO Brand { get; set; }
     public int SellerAccountId { get; set; }
+    public SizeDTO Size {get;set;}
     public AccountDTO SellerAccount { get; set; }
     public DateTime? Updated { get; set; }
 }

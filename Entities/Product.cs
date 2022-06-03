@@ -17,6 +17,11 @@ public class Product {
     public Brand Brand { get; set; }
     public int AccountId { get; set; } 
     public Account Account { get; set; }
+    public Size Size {get;set;}
+    public int SizeId {get;set;}
+    public decimal Stars {get;set;}
+    public int CurrencyId {get;set;}
+    public Currency Currency {get;set;}
     public DateTime Created { get; set; }
     public DateTime? Updated { get; set; }
 
@@ -33,6 +38,7 @@ public class Product {
             BrandId = this.BrandId,
             Brand = this.Brand.FromEntity(),
             Images = Images != null ? this.Images.Select(i => i.FromEntity()).ToList() : new List<ImageDTO>(),
+            Size = Size.toDto(),
             Updated = this.Updated
         };
     }

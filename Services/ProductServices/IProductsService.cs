@@ -4,7 +4,9 @@ public interface IProductsService {
     ProductResponse CreateProduct(ProductsRequest request);
     ProductResponse RemoveProduct(int id);
     List<ProductResponse> GetProductByCategory(int id);
-    
+    List<SizeDTO> GetAllSizes();
+    List<SizeDTO> InsertListSizes(SizeRequest request);
+    BrandResponse GetAllBrands();
 }
 
 public class CreateRequest {
