@@ -29,6 +29,8 @@ public interface IAccountService
     AccountResponse Update(int id, UpdateRequest model);
     void Delete(int id);
     string ShowMessage(string message);
+    CityResponseDTO GetAvailableCities(string contains);
+    SellerFormDto CreateSellerForm(SellerFormDto request);
 }
 
 public class AccountService : IAccountService
@@ -75,6 +77,7 @@ public class AccountService : IAccountService
         var response = _mapper.Map<AuthenticateResponse>(account);
         response.JwtToken = jwtToken;
         response.RefreshToken = refreshToken.Token;
+        response.HasApprovedSellerForm = _context.SellerForm.Any(x => x.IdAccount == account.Id && x.isApproved);  
         return response;
     }
 
@@ -343,6 +346,56 @@ public class AccountService : IAccountService
             return generateVerificationToken();
         
         return token;
+    }
+
+    public CityResponseDTO GetAvailableCities(string contains)
+    {
+        var client = new HttpClient();
+        var request = new HttpRequestMessage
+        {
+            Method = HttpMethod.Get,
+            RequestUri = new Uri($"https://wft-geo-db.p.rapidapi.com/v1/geo/cities?countryIds=hn&minPopulation=500000&sort=name"),            
+            Headers =
+    {
+        { "X-RapidAPI-Host", "wft-geo-db.p.rapidapi.com" },
+        { "X-RapidAPI-Key", "7c8ee4a2a2mshdb6845080e6f3f0p194fcejsn6473f28c629c" },
+    },
+        };
+        var cities = client.SendAsync(request).Result.Content.ReadFromJsonAsync<CityResponseDTO>().Result;
+
+        if(!string.IsNullOrEmpty(contains)){
+            cities.data = cities.data.Where(x => x.Name.ToLower().Contains(contains.ToLower())).ToList();
+        }
+        return cities;
+    }
+
+    public SellerFormDto CreateSellerForm(SellerFormDto request){
+        var user = _context.Accounts.FirstOrDefault(x => x.Id == int.Parse(request.UserId));
+        if(user == null){
+            throw new AppException("User not found");
+        }
+        var sellerForm = MaterializeSellerForm(request); 
+        _context.SellerForm.Add(sellerForm);
+        _context.SaveChanges();
+        return sellerForm.toDTO();
+    }
+
+    private SellerForm MaterializeSellerForm(SellerFormDto request)
+    {
+        return new SellerForm
+        {
+            AcceptAllTerms = request.AcceptTerms,
+            AcceptDevolutionConditions = request.AcceptDevolutionterms,
+            Address = request.Address,
+            City = request.City,
+            DNI = request.Dni,
+            DNIImage_Back = request.DniBack,
+            DNIImage_Front = request.DniFront,
+            IdAccount = int.Parse(request.UserId),
+            Phone = request.Phone,
+isApproved = false            
+            
+        };
     }
 
     private RefreshToken rotateRefreshToken(RefreshToken refreshToken, string ipAddress)

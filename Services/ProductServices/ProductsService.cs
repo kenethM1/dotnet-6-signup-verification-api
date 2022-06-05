@@ -38,6 +38,7 @@ public ProductResponse CreateProduct(ProductsRequest request)
         Price = request.Price,
         CategoryId = request.CategoryId,
         BrandId = request.BrandId,
+        CurrencyId = 1,
         AccountId = request.AccountId,
         Images = request.Images.Select(x => new Image
         {

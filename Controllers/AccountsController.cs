@@ -152,6 +152,19 @@ public class AccountsController : BaseController
         _accountService.Delete(id);
         return Ok(new { message = "Account deleted successfully" });
     }
+    [AllowAnonymous]
+    [HttpGet("/appAvailableCities")]
+    public IActionResult GetAvailableCities(string contains)
+    {
+        return Ok(_accountService.GetAvailableCities(contains));
+    }
+
+    [AllowAnonymous]
+    [HttpPost("/appSellerForm")]
+    public IActionResult NewSellerForm(SellerFormDto request)
+    {
+        return Ok(_accountService.CreateSellerForm(request));
+    }
 
     // helper methods
 
