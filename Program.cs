@@ -31,7 +31,12 @@ var builder = WebApplication.CreateBuilder(args);
     services.AddScoped<IEmailService, EmailService>();
     services.AddScoped<IProductsService, ProductsService>();
     services.AddScoped<ICategoriesService, CategoriesService>();
+    services.AddScoped<IPaymentService, PaymentService>();
+    services.AddScoped<IPayGate, PayGate>();
+    services.AddScoped<ISalesService, SaleService>();
 }
+
+
 
 var app = builder.Build();
 

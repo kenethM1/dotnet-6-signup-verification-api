@@ -19,12 +19,15 @@ public class DataContext : DbContext
     public DbSet<SaleDetail> SaleDetail {get;set;}
     public DbSet<Payment> Payment {get;set;}
     public DbSet<Cards> Cards {get;set;}
+    public DbSet<CustomerPayment> CustomerPayment {get;set;}
 
     private readonly IConfiguration Configuration;
+    
 
     public DataContext(IConfiguration configuration)
     {
         Configuration = configuration;
+        
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
@@ -32,6 +35,12 @@ public class DataContext : DbContext
         // connect to sqlite database
         var connectionString = Configuration.GetConnectionString("WebApiDatabase");
         options.UseMySql(connectionString, 
-        ServerVersion.AutoDetect(connectionString));
+        ServerVersion.AutoDetect(connectionString));       
+    }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<SellerForm>().HasOne(x => x.Account).WithOne(x => x.SaleForm).HasForeignKey<SellerForm>(x => x.IdAccount);
+        modelBuilder.Entity<SaleDetail>().HasOne(x => x.Sale).WithMany(x => x.SaleDetails).HasForeignKey(x => x.SaleId);
+        modelBuilder.Entity<SaleDetail>().HasOne(x => x.Product).WithOne(x => x.Sale).HasForeignKey<SaleDetail>(x => x.ProductId).OnDelete(DeleteBehavior.Restrict);
     }
 }

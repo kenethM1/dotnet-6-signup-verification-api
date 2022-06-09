@@ -13,6 +13,8 @@ public class Account
     public Role Role { get; set; }
     public List<Product> Products { get; set; }
     public List<Cards> Cards { get; set; }
+    public List<CustomerPayment> CustomerPayment { get; set; }
+    public SellerForm SaleForm { get; set; }
     public string VerificationToken { get; set; }
     public string VerificationCode { get; set; }
     public DateTime? Verified { get; set; }
