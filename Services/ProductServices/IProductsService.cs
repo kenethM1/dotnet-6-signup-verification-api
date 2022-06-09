@@ -7,6 +7,9 @@ public interface IProductsService {
     List<SizeDTO> GetAllSizes();
     List<SizeDTO> InsertListSizes(SizeRequest request);
     BrandResponse GetAllBrands();
+    void MakeProductUnavailable(Product product);
+    Product GetProduct(string productId);
+    
 }
 
 public class CreateRequest {

@@ -60,7 +60,8 @@ public ProductResponse CreateProduct(ProductsRequest request)
 }
     public List<ProductResponse> GetProductByCategory(int id)
     {
-        var products = _context.Products.Where(e=>e.CategoryId == id).Include(x => x.Category).Include(x => x.Brand).Include(x => x.Account).Include(e=>e.Images).Where(x => x.CategoryId == id).ToList();
+        var products = _context.Products.Where(e=>e.CategoryId == id && e.IsSelled == false).Include(x => x.Category).Include(x => x.Brand).Include(x => x.Account).Include(e=>e.Images).Where(x => x.CategoryId == id).ToList();       
+
         var response = products.Select(x => new ProductResponse
         {
             Id = x.Id,
@@ -75,6 +76,18 @@ public ProductResponse CreateProduct(ProductsRequest request)
             Images = x.Images.Select(i => i.FromEntity()).ToList()
         }).ToList();
         return response;
+    }
+
+    public void MakeProductUnavailable(Product product)
+    {
+        product.IsSelled = true;
+        _context.SaveChanges();
+    }
+
+    public Product GetProduct(string productId)
+    {
+        var product = _context.Products.Include(x => x.Category).Include(x => x.Brand).Include(x => x.Account).Include(e=>e.Images).FirstOrDefault(x => x.Id == int.Parse(productId));
+        return product;
     }
 
     public ProductResponse RemoveProduct(int id)

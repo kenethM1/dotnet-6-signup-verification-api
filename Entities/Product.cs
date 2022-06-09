@@ -21,9 +21,11 @@ public class Product {
     public int SizeId {get;set;}
     public decimal Stars {get;set;}
     public int CurrencyId {get;set;}
+    public bool IsSelled {get;set;}
     public Currency Currency {get;set;}
     public DateTime Created { get; set; }
     public DateTime? Updated { get; set; }
+    public SaleDetail Sale { get; set; }
 
     internal ProductResponse FromEntity()
     {

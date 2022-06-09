@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using WebApi.Entities;
 
 public class SellerForm
 {
@@ -7,6 +8,7 @@ public class SellerForm
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
    public int IdSellerForm { get; set; }
     public int IdAccount { get; set; }
+    public Account Account { get; set; }
     public string City { get; set; }
     public string Address { get; set; }
     public string DNI { get; set; }

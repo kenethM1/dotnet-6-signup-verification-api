@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApi.Helpers;
 
@@ -10,9 +11,10 @@ using WebApi.Helpers;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220607032258_addPaymentCustomerTable")]
+    partial class addPaymentCustomerTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -251,6 +253,9 @@ namespace WebApi.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
+                    b.Property<int>("SaleId1")
+                        .HasColumnType("int");
+
                     b.Property<int>("SellerId")
                         .HasColumnType("int");
 
@@ -259,8 +264,9 @@ namespace WebApi.Migrations
 
                     b.HasKey("SaleId");
 
-                    b.HasIndex("ProductId")
-                        .IsUnique();
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("SaleId1");
 
                     b.HasIndex("SellerId");
 
@@ -304,9 +310,6 @@ namespace WebApi.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.HasKey("IdSellerForm");
-
-                    b.HasIndex("IdAccount")
-                        .IsUnique();
 
                     b.ToTable("SellerForm");
                 });
@@ -543,14 +546,14 @@ namespace WebApi.Migrations
             modelBuilder.Entity("SaleDetail", b =>
                 {
                     b.HasOne("WebApi.Entities.Product", "Product")
-                        .WithOne("Sale")
-                        .HasForeignKey("SaleDetail", "ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Sale", "Sale")
+                    b.HasOne("Sale", null)
                         .WithMany("SaleDetails")
-                        .HasForeignKey("SaleId")
+                        .HasForeignKey("SaleId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -562,20 +565,7 @@ namespace WebApi.Migrations
 
                     b.Navigation("Product");
 
-                    b.Navigation("Sale");
-
                     b.Navigation("Seller");
-                });
-
-            modelBuilder.Entity("SellerForm", b =>
-                {
-                    b.HasOne("WebApi.Entities.Account", "Account")
-                        .WithOne("SaleForm")
-                        .HasForeignKey("SellerForm", "IdAccount")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Account");
                 });
 
             modelBuilder.Entity("WebApi.Entities.Account", b =>
@@ -701,15 +691,11 @@ namespace WebApi.Migrations
                     b.Navigation("CustomerPayment");
 
                     b.Navigation("Products");
-
-                    b.Navigation("SaleForm");
                 });
 
             modelBuilder.Entity("WebApi.Entities.Product", b =>
                 {
                     b.Navigation("Images");
-
-                    b.Navigation("Sale");
                 });
 #pragma warning restore 612, 618
         }
