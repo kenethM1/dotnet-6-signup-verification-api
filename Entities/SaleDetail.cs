@@ -8,9 +8,28 @@ public class SaleDetail
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int SaleId { get; set; }
     public int SellerId { get; set; }
-    public Sale Sale { get; set; }
-    public Account Seller { get; set; }
+    public virtual Sale Sale { get; set; }
+    public virtual Account Seller { get; set; }
     public int ProductId { get; set; }
-    public Product Product { get; set; }
+    public virtual Product Product { get; set; }
     public string Status { get; set; }
+
+    internal bool StatusCanBeChangedBySeller()
+    {
+        return Status == Statuses.Pending;
+    }
+
+    internal string NextStatus()
+    {
+        if (Status == Statuses.Pending)
+            return Statuses.Delivering;
+        if (Status == Statuses.Delivering)
+            return Statuses.Delivered;
+        return Statuses.Error;
+    }
+
+    internal bool StatusCanBeChangedByBuyer()
+    {
+        return Status == Statuses.Delivering;
+    }
 }

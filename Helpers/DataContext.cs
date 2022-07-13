@@ -27,20 +27,20 @@ public class DataContext : DbContext
     public DataContext(IConfiguration configuration)
     {
         Configuration = configuration;
-        
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
-    {
-        // connect to sqlite database
+    {  
         var connectionString = Configuration.GetConnectionString("WebApiDatabase");
         options.UseMySql(connectionString, 
-        ServerVersion.AutoDetect(connectionString));       
+        ServerVersion.AutoDetect(connectionString)); 
+        options.UseLazyLoadingProxies();       
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<SellerForm>().HasOne(x => x.Account).WithOne(x => x.SaleForm).HasForeignKey<SellerForm>(x => x.IdAccount);
         modelBuilder.Entity<SaleDetail>().HasOne(x => x.Sale).WithMany(x => x.SaleDetails).HasForeignKey(x => x.SaleId);
         modelBuilder.Entity<SaleDetail>().HasOne(x => x.Product).WithOne(x => x.Sale).HasForeignKey<SaleDetail>(x => x.ProductId).OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Product>().HasOne(x=>x.Sale).WithOne(x=>x.Product).HasForeignKey<SaleDetail>(x=>x.ProductId);
     }
 }

@@ -25,4 +25,17 @@ public class SalesController : BaseController
         var response = _salesService.GetMyOrders(userId);
         return Ok(response);
     }
+    [AllowAnonymous]
+    [HttpPost("/UpdateOrderStatus")]
+    public ActionResult<OrdersResponse> UpdateOrderStatus([FromBody] SaleUpdateStatusRequest request){
+        var response = _salesService.UpdateOrderStatus(request.UserId, request.SaleId);
+        return Ok(response);
+    }
+
+    [AllowAnonymous]
+    [HttpGet("/GetMyUnpaidSales")]
+    public ActionResult<OrdersResponse> GetUnPaidProducts(int userId){
+        var response = _salesService.GetUnpaidSales(userId);
+        return Ok(response);
+    }
 }

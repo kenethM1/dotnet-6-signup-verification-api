@@ -31,6 +31,7 @@ public interface IAccountService
     string ShowMessage(string message);
     CityResponseDTO GetAvailableCities(string contains);
     SellerFormDto CreateSellerForm(SellerFormDto request);
+    AccountDTO UpdateProfileImage(UpdateProfilePictureRequest request);
 }
 
 public class AccountService : IAccountService
@@ -395,6 +396,21 @@ public class AccountService : IAccountService
             Phone = request.Phone,
 isApproved = false            
             
+        };
+    }
+
+    public AccountDTO UpdateProfileImage(UpdateProfilePictureRequest request)
+    {
+        var user = _context.Accounts.FirstOrDefault(e=>e.Id == int.Parse(request.UserId));
+        if(user != null)
+        {
+            user.ProfilePicture = request.ImageUrl;
+            _context.SaveChanges();
+            return user.FromEntity();
+        }
+        return new AccountDTO{
+            Success = false,
+            Message = "Error, user doesn't exists."
         };
     }
 

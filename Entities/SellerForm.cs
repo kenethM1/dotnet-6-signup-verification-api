@@ -8,14 +8,14 @@ public class SellerForm
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
    public int IdSellerForm { get; set; }
     public int IdAccount { get; set; }
-    public Account Account { get; set; }
+    public virtual Account Account { get; set; }
     public string City { get; set; }
     public string Address { get; set; }
     public string DNI { get; set; }
     public string DNIImage_Front { get; set; }
     public string DNIImage_Back {get;set;}
     public string Phone { get; set; }
-    public List<BankAccount> BankAccount { get; set; }
+    public virtual List<BankAccount> BankAccount { get; set; }
     public bool AcceptAllTerms { get; set; }
     public bool AcceptDevolutionConditions { get; set; }
     public bool isApproved { get; set; }

@@ -165,6 +165,12 @@ public class AccountsController : BaseController
     {
         return Ok(_accountService.CreateSellerForm(request));
     }
+    [AllowAnonymous]
+    [HttpPost("/updateImageProfile")]
+    public IActionResult UpdateImageProfile(UpdateProfilePictureRequest request)
+    {
+        return Ok(_accountService.UpdateProfileImage(request));
+    }
 
     // helper methods
 

@@ -7,8 +7,8 @@ public class BankAccount{
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int BankAccountId { get; set; }
     public int SellerId { get; set; }
-    public Account Account { get; set; }
-    public SellerForm SellerForm { get; set; }
+    public virtual Account Account { get; set; }
+    public virtual SellerForm SellerForm { get; set; }
     public string AccountNumber { get; set; }
     public string AccountHolder { get; set; }
     public string BankName { get; set; }

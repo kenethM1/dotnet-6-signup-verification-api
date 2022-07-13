@@ -10,22 +10,22 @@ public class Product {
     public string Title { get; set; }
     public string Description { get; set; }
     public decimal Price { get; set; }
-    public List<Image> Images { get; set; }
+    public virtual List<Image> Images { get; set; }
     public int CategoryId { get; set; }
-    public Category Category { get; set; }
+    public virtual Category Category { get; set; }
     public int BrandId { get; set; }
-    public Brand Brand { get; set; }
+    public virtual Brand Brand { get; set; }
     public int AccountId { get; set; } 
-    public Account Account { get; set; }
-    public Size Size {get;set;}
+    public virtual Account Account { get; set; }
+    public virtual Size Size {get;set;}
     public int SizeId {get;set;}
     public decimal Stars {get;set;}
     public int CurrencyId {get;set;}
     public bool IsSelled {get;set;}
-    public Currency Currency {get;set;}
+    public virtual Currency Currency {get;set;}
     public DateTime Created { get; set; }
     public DateTime? Updated { get; set; }
-    public SaleDetail Sale { get; set; }
+    public virtual SaleDetail Sale { get; set; }
 
     internal ProductResponse FromEntity()
     {

@@ -10,11 +10,11 @@ public class Account
     public string ProfilePicture { get; set; }
     public string PasswordHash { get; set; }
     public bool AcceptTerms { get; set; }
-    public Role Role { get; set; }
-    public List<Product> Products { get; set; }
-    public List<Cards> Cards { get; set; }
-    public List<CustomerPayment> CustomerPayment { get; set; }
-    public SellerForm SaleForm { get; set; }
+    public virtual Role Role { get; set; }
+    public virtual List<Product> Products { get; set; }
+    public virtual List<Cards> Cards { get; set; }
+    public virtual List<CustomerPayment> CustomerPayment { get; set; }
+    public virtual SellerForm SaleForm { get; set; }
     public string VerificationToken { get; set; }
     public string VerificationCode { get; set; }
     public DateTime? Verified { get; set; }

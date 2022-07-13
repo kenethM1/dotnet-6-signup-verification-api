@@ -5,6 +5,7 @@ using WebApi.Helpers;
 using WebApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.ConfigureKestrel(options => options.ListenLocalhost(8888));
 
 // add services to DI container
 {
@@ -24,7 +25,6 @@ var builder = WebApplication.CreateBuilder(args);
     // configure strongly typed settings object
     services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
-
     // configure DI for application services
     services.AddScoped<IJwtUtils, JwtUtils>();
     services.AddScoped<IAccountService, AccountService>();
@@ -35,8 +35,6 @@ var builder = WebApplication.CreateBuilder(args);
     services.AddScoped<IPayGate, PayGate>();
     services.AddScoped<ISalesService, SaleService>();
 }
-
-
 
 var app = builder.Build();
 
@@ -74,6 +72,9 @@ using (var scope = app.Services.CreateScope())
     app.UseMiddleware<JwtMiddleware>();
 
     app.MapControllers();
-}
+   
 
-app.Run("http://192.168.31.148:4000");
+// Add services to the container.
+app.Run();
+
+}

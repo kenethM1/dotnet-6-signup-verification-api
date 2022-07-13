@@ -81,7 +81,7 @@ public class PaymentService : IPaymentService
                 ProductId = product.Id,
                 SellerId = product.AccountId,
                 Status = Statuses.Pending,
-            });
+            }); 
         }
         return saleDetails;
     }

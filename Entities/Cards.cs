@@ -13,7 +13,7 @@ public class Cards
     public string CVVHash { get; set; }
     public string ExpirationDate { get; set; }
     public int AccountId { get; set; }
-    public Account Account { get; set; }
+    public virtual Account Account { get; set; }
     public bool IsDefault { get; set; }
     public bool IsActive { get; set; }
 }

@@ -6,6 +6,6 @@ public class Payment {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int PaymentId {get;set;}
     public int SaleDetailId {get;set;}
-    public SaleDetail Sale {get;set;}
+    public virtual SaleDetail Sale {get;set;}
     public string Status {get;set;}
 }
